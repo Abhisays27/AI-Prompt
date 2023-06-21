@@ -1,6 +1,6 @@
 "use client";
-
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 import PromptCard from "./PromptCard";
 
@@ -20,6 +20,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   // Search states
   const [searchText, setSearchText] = useState("");
@@ -31,10 +32,11 @@ const Feed = () => {
     const data = await response.json();
 
     setAllPosts(data);
+    setLoading(false); // Set loading to false once posts are fetched
   };
 
   useEffect(() => {
-  fetchPosts();
+    fetchPosts();
   }, []);
 
   const filterPrompts = (searchtext) => {
@@ -80,14 +82,23 @@ const Feed = () => {
         />
       </form>
 
-      {/* All Prompts */}
-      {searchText ? (
+      {/* Render loading component if loading state is true */}
+      {loading ? (
+        <div className='w-full flex-center pt-6 mt-11'>
+          <Image
+            src='assets/icons/loader.svg'
+            width={50}
+            height={50}
+            alt='loader'
+            className='object-contain'
+          />
+        </div>
+      ) : (
+        // Render PromptCardList with either searchedResults or allPosts
         <PromptCardList
-          data={searchedResults}
+          data={searchText ? searchedResults : allPosts}
           handleTagClick={handleTagClick}
         />
-      ) : (
-        <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
       )}
     </section>
   );

@@ -33,7 +33,7 @@ const Nav = () => {
       alt="Promtopia Logo"
       className='object-contain'
     />
-    <p className="logo_text">Promtopia</p>
+    <p className="logo_text">TechnoTweets</p>
            
   </Link>
   
